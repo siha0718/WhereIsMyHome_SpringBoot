@@ -1,0 +1,78 @@
+.container{
+    width: 800px;
+    height: 650px;
+    border-radius: 1%;
+    border: 1px solid rgba(71,71,71,.398);
+    padding: 20px 50px;
+    margin-top:50px;
+    margin-bottom: 50px;
+}
+.row1{
+    width:150px;
+  }
+  
+#signup{
+    position: relative;
+    top:50px;
+    left:5%;
+    font-size:30px;
+    font-weight: bold;
+    color:#38B6FF;
+    text-align: left;
+}
+p{
+    height: 40px;
+    margin-top: 20px;
+}
+input{
+    width: 250px;
+    height: 44px;
+    border:1px solid rgba(216,216,216,1);
+    border-radius:8px;
+    
+
+}
+td{
+	width:120px;
+    height:70px;
+    font-size: 20px;
+    
+}
+table{
+    position: relative;
+    left:5%;
+    top:100px;
+
+}
+
+table input {
+	padding-left:20px;
+}
+
+#logo {
+    padding: 45px 0px 25px 0px;
+}
+#ex{
+	width : 300px;
+	font-size: 15px;
+    color:rgba(71,71,71,.499);
+}
+#button{
+    position: relative;
+    left: 100%;
+    top: 130px;
+    margin-left: -90px;
+    color:white;
+    width: 90px;
+    height: 40px;
+    background-color: #38B6FF;
+    border-radius: 5rem;
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold;
+
+}
+#signup{
+    font-family : 'Noto Sans KR', sans-serif;
+    font-weight: 700;
+}
