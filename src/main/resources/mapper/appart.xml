@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.home.apt.dao.AppartDAO">
+
+	<select id="getSido" resultType="string">
+		select DISTINCT sidoName from dongcode
+	</select>
+	
+	<select id="getGugun" resultType="string" parameterType="string">
+		select DISTINCT gugunName 
+		from dongcode 
+		where sidoName= #{sido} and gugunName is not null
+	</select>
+
+	<select id="getDong" resultType="string" parameterType="string">
+		select DISTINCT dongName 
+		from dongcode 
+		where sidoName= #{sido} and gugunName= #{gugun} and dongName is not null
+	</select>
+	
+	<select id="selectAll" resultType="Appart" parameterType="string">
+		select i.apartmentName, d.dealAmount, d.area, d.dealYear, d.dealMonth, i.lng, i.lat
+		from housedeal d inner join houseinfo i
+		on d.aptCode = i.aptCode
+		where (select dongCode from dongcode where sidoName = #{sido} and gugunName = #{gugun} and dongName = #{dong})
+		= i.dongCode and d.dealYear = #{year} and d.dealMonth = #{month}
+		group by i.apartmentName
+	</select>
+
+</mapper>

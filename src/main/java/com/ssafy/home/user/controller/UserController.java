@@ -1,247 +1,232 @@
- package com.ssafy.home.user.controller;
+package com.ssafy.home.user.controller;
 
- import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import javax.servlet.http.Cookie;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.ssafy.sample.dto.User;
-import com.ssafy.sample.model.service.UserService;
-import com.ssafy.sample.model.service.UserServiceImpl;
-import com.ssafy.sample.util.DBUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.ssafy.home.user.dto.User;
+import com.ssafy.home.user.service.UserService;
 
 
- @WebServlet("/user")
- public class UserController extends HttpServlet {
+@Controller
+@RequestMapping("/user")
+public class UserController {
 
- 	private static final long serialVersionUID = 1L;
+	
+	private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
- 	// Mybatis 연동 DB
- 	private UserService service = UserServiceImpl.getInstance();
-
+	private final UserService service;	
  	
- 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
- 		process(request, response);
- 	}
+	@Autowired
+ 	public UserController(UserService service) {
+		logger.info("UserController 생성자 호출");
+		this.service = service;
+	}
 
- 	
- 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
- 		// post 요청 시 한글 파라미터의 처리를 위해 encoding을 처리한다.
- 		request.setCharacterEncoding("utf-8");
- 		process(request, response);
- 	}
-
- 	
- 	private void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
- 		String action = request.getParameter("action");
- 		System.out.println("action>>>"+ action);
- 	      
- 	      try {
- 			if(action==null) {
- 				  //==> 첫페이지 이동
- 				  response.sendRedirect(request.getContextPath());
- 			  }else if(action.equals("regist")) {//DB입력 요청
- 				  doRegist(request, response);
- 			  }else if(action.equals("form")) {//입력폼 요청
- 				  request.getRequestDispatcher("/signup.jsp").forward(request, response);
- 			  }else if(action.equals("login")) {//DB입력 요청
- 				  doLogin(request, response);
- 			  }else if(action.equals("logout")) {//DB목록 요청
- 				  doLogout(request, response);
- 			  }else if(action.equals("edit")){
- 				  doEdit(request, response);
- 			  }else if(action.equals("star")){
- 				 doStar(request, response);
- 			  }
- 		} catch (Exception e) {
- 			request.getRequestDispatcher("/error/error.jsp").forward(request, response);
- 			e.printStackTrace();
- 		}
- 			
- 	}
-
- 
-
-	private void doStar(HttpServletRequest request, HttpServletResponse response) throws SQLException {
-		// TODO Auto-generated method stub
-		System.out.println("REHH");
-		System.out.println(request.getParameter("dongCode"));
-		
-		HttpSession session=request.getSession();
-		User user=(User)session.getAttribute("userinfo");
-		if(user==null) {
-			return;
-		}else {
-			DBUtil dbUtil = DBUtil.getInstance();
-			System.out.println("HHH");
-			Connection conn = null;
-			PreparedStatement pstmt = null;
-			ResultSet rs = null;
-			
-			conn = dbUtil.getConnection();
-			String sql="select no from user where id=?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, user.getUserid());
-			rs = pstmt.executeQuery();
-			rs.next();
-			int no=rs.getInt("no");
-			
-			sql="insert into likes values (?, ?)";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, no);
-			pstmt.setString(2, request.getParameter("dongCode"));
-			pstmt.executeUpdate();
-			dbUtil.close(rs, pstmt, conn);
-//			insert into likes values (1, 1111017200)
-		}
+	
+	/* -------------------------- 로그인-------------------------- */
+	
+	@GetMapping("/login")
+	public String doLogin() {
+		return "login";
 	}
 	
-	public class SHA256 {
-
-	    public String encrypt(String text) throws NoSuchAlgorithmException {
-	        MessageDigest md = MessageDigest.getInstance("SHA-256");
-	        md.update(text.getBytes());
-
-	        return bytesToHex(md.digest());
-	    }
-
-	    private String bytesToHex(byte[] bytes) {
-	        StringBuilder builder = new StringBuilder();
-	        for (byte b : bytes) {
-	            builder.append(String.format("%02x", b));
-	        }
-	        return builder.toString();
-	    }
-
-	}
-
-	private void doRegist(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NoSuchAlgorithmException {
-		//1. 
-		String userid = request.getParameter("userid");
-		String username = request.getParameter("username");
-		String address = request.getParameter("address");
-		String phone = request.getParameter("phone");
-		
-		//2. password 검증 및 암호화
-		String pattern = "^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}$";
-		String password = request.getParameter("password");
-		// 2.1 패턴 매칭실패
-		if(!password.matches(pattern)) {
-			System.out.println("Diffrent pattern");
-			response.sendRedirect("./signup.jsp");
-			return;
-		}
-
-		
-		// 비밀번호 암호화
-		SHA256 sha256 = new SHA256();
-		String cryptogram = sha256.encrypt(password);
-		
-		User user = new User(userid, cryptogram, username, address, phone);
-		//3. 모델 객체 (service, DAO) 생성, 호출
+	@PostMapping("/login")
+	public String doLogin(@RequestParam Map<String, String> map, Model model, HttpSession session, HttpServletResponse response) {
+		logger.debug("map : {}", map.get("userid"));
 		try {
-			int rowCnt = service.regist(user);
-			if(rowCnt == 1) {
-				String msg = "회원가입 완료";
-				request.setAttribute("msg", msg);
-				response.sendRedirect(request.getContextPath() + "/login.jsp");
-			}
-		} catch (SQLException e) {	
-			response.sendRedirect("./signup.jsp");
-			e.printStackTrace();
-			return;
-			
-		}
-		
-
- 	}
-	
- 	private void doLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException, NoSuchAlgorithmException {
-		
-		String id = request.getParameter("id");
-		String password = request.getParameter("pw");
-		SHA256 sha256 = new SHA256();
-		String cryptogram = sha256.encrypt(password);
-		
-		User userinfo = service.login(id, cryptogram);
-		
-		
-		if(userinfo != null) {//로그인이 잘 되었다면
-			//로그인 성공 시 세션을 사용하여 브라우저에서 계속 유지 ==> 세션 로그인
-			HttpSession session = request.getSession();
-			//4.
-			session.setAttribute("userinfo", userinfo);
-			
-			request.setAttribute("msg", "로그인 성공!");
+			User user = service.login(map);
+			logger.debug("UserDto : {}", user);
+			if(user != null) {
+				session.setAttribute("userinfo", user);
 				
-			
-		}else {//로그인 실패
-			request.setAttribute("msg", "로그인 실패!");
-			request.getRequestDispatcher("/login.jsp").forward(request, response);			
+				Cookie cookie = new Cookie("ssafy_id", map.get("userid"));
+				cookie.setPath("/board");
+				if("ok".equals(map.get("saveid"))) {
+					cookie.setMaxAge(60*60*24*365*40);
+				} else {
+					cookie.setMaxAge(0);
+				}
+				response.addCookie(cookie);
+				return "redirect:/";
+			} else {
+				model.addAttribute("msg", "아이디 또는 비밀번호 확인 후 다시 로그인하세요!");
+				return "user/login";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("msg", "로그인 중 문제 발생!!!");
+			return "error/error";
 		}
-		
-		//5.
-		response.sendRedirect("./index.jsp");	//첫페이지로감
-		
-	}		
-	
+	}
 
-	private void doLogout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-		
-		request.getSession().invalidate();		
-		response.sendRedirect(request.getContextPath());		
+	
+	/* -------------------------- 회원가입 -------------------------- */
+
+	@GetMapping("/regist")
+	public String doRegist() { 
+		return "signup";
+	}
+	
+	@PostMapping("/regist")
+	public String doRegist(User user, Model model) {
+		logger.debug("User info : {}", user);
+		try {
+			service.regist(user);
+			return "redirect:/login";
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("msg", "회원 가입 중 문제 발생!!!");
+			return "error/error";
+		}
+	}
+	
+	
+	/* -------------------------- 로그아웃 -------------------------- */
+
+	@GetMapping("/logout")
+	public String doLogout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/";
 	}
 	
 	
 	
-	private void doEdit(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, ServletException {
+	/* -------------------------- 회원정보 수정 -------------------------- */
+
+	
+	@GetMapping("/edit")
+	public String doEdit() {		
+		return "edit";
+	}
+	
+	
+	public String doEdit(User user, Model model) {
+		logger.debug("수정 요청한 User info : {}", user);
+		try {
+			service.edit(user);
+			return "redirect:/";
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("msg", "정보 수정 중 문제 발생!!!");
+			return "error/error";
+		}
+	
+	}
+	
+	
+	
+	/* -------------------------- 즐겨찾기 -------------------------- */
+
+	
+	@GetMapping("/star")
+	public String doStar(@RequestParam("dongcode") int dongcode, HttpSession session, Model model) throws Exception {
 		
-		HttpSession session = request.getSession();
+		logger.debug("show favorite dongcode : {}", dongcode);
 		
 		User user = (User) session.getAttribute("userinfo");
-		
-		String id = user.getUserid();		
-		String password = request.getParameter("password");
-		String username = request.getParameter("username");
-		String address = request.getParameter("address");
-		String phone = request.getParameter("phone");
-		
-		User u = new User(id, password, username, address, phone);
-		
-		
-		int rowCnt = service.edit(u);
-		
-		
-		if(rowCnt == 1) {
-			String msg = "정보 수정 완료";
-			request.setAttribute("msg", "등록완료");
-			session.setAttribute("userinfo", u);
-//			request.getRequestDispatcher("/note/listNote.jsp").forward(request, response);
-			response.sendRedirect("./index.jsp");
-			return;
-				
+		logger.debug("즐겨찾기 선택한 사용자 정보", user);
+		if(user == null) {
+			model.addAttribute("msg", "로그인 후 가능합니다");
+		}
+		else { 
+			int no = service.findNo(user);
 			
-		}else {//로그인 실패
-			request.setAttribute("msg", "수정 실패");
-			request.getRequestDispatcher("/error/error.jsp").forward(request, response);		
+			Map<String, Integer> map = new HashMap<String, Integer>();
+			map.put("no", no);
+			map.put("dongcode", dongcode);
+			service.addStar(map);
 		}
 		
-		//5.
-		response.sendRedirect("./index.jsp");	//첫페이지로감
+		
+		return "redirect:/";
 	}
+	
+	
+	
 
+	
+	
+	
+	
+	
+ 
 
-
-
+	
+//	
+//	public class SHA256 {
+//
+//	    public String encrypt(String text) throws NoSuchAlgorithmException {
+//	        MessageDigest md = MessageDigest.getInstance("SHA-256");
+//	        md.update(text.getBytes());
+//
+//	        return bytesToHex(md.digest());
+//	    }
+//
+//	    private String bytesToHex(byte[] bytes) {
+//	        StringBuilder builder = new StringBuilder();
+//	        for (byte b : bytes) {
+//	            builder.append(String.format("%02x", b));
+//	        }
+//	        return builder.toString();
+//	    }
+//
+//	}
+//
+//	private void doRegist(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NoSuchAlgorithmException {
+//		//1. 
+//		String userid = request.getParameter("userid");
+//		String username = request.getParameter("username");
+//		String address = request.getParameter("address");
+//		String phone = request.getParameter("phone");
+//		
+//		//2. password 검증 및 암호화
+//		String pattern = "^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}$";
+//		String password = request.getParameter("password");
+//		// 2.1 패턴 매칭실패
+//		if(!password.matches(pattern)) {
+//			System.out.println("Diffrent pattern");
+//			response.sendRedirect("./signup.jsp");
+//			return;
+//		}
+//
+//		
+//		// 비밀번호 암호화
+//		SHA256 sha256 = new SHA256();
+//		String cryptogram = sha256.encrypt(password);
+//		
+//		User user = new User(userid, cryptogram, username, address, phone);
+//		//3. 모델 객체 (service, DAO) 생성, 호출
+//		try {
+//			int rowCnt = service.regist(user);
+//			if(rowCnt == 1) {
+//				String msg = "회원가입 완료";
+//				request.setAttribute("msg", msg);
+//				response.sendRedirect(request.getContextPath() + "/login.jsp");
+//			}
+//		} catch (SQLException e) {	
+//			response.sendRedirect("./signup.jsp");
+//			e.printStackTrace();
+//			return;
+//			
+//		}
+//		
+//
+// 	}
+//	
+ 	
 
  }

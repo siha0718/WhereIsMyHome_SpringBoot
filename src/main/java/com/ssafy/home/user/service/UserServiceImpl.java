@@ -1,44 +1,51 @@
 package com.ssafy.home.user.service;
 
-import java.sql.SQLException;
+import java.util.Map;
 
-import com.ssafy.sample.dto.User;
-import com.ssafy.sample.model.dao.UserDao;
-import com.ssafy.sample.model.dao.UserDaoImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.ssafy.home.user.dao.UserDao;
+import com.ssafy.home.user.dto.User;
+
+@Service
 public class UserServiceImpl implements UserService {
 	
-	private UserDao dao = UserDaoImpl.getInstance();
-	
-	private static UserServiceImpl instance = new UserServiceImpl();
-	
-	private UserServiceImpl() {}
-	
-	
-	public static UserServiceImpl getInstance() {
-		return instance;
-	}
+	private UserDao dao;
 
-
-	@Override
-	public int regist(User user) throws SQLException {
-		return dao.insert(user);
+	@Autowired
+	public UserServiceImpl(UserDao dao) {
+		this.dao = dao;
 	}
 
 	@Override
-	public User login(String id, String pw) throws SQLException {
-		return dao.select(id, pw);
+	public void regist(User user) throws Exception {
+		dao.regist(user);
 	}
-
 
 	@Override
-	public int edit(User user) throws SQLException {
-		return dao.update(user);
+	public User login(Map<String, String> map) throws Exception {
+		return dao.login(map);
 	}
 
+	@Override
+	public void edit(User user) throws Exception {
+		dao.edit(user);		
+	}
+
+	@Override
+	public int findNo(User user) throws Exception {
+		return dao.findNo(user);
+	}
+
+	@Override
+	public void addStar(Map<String, Integer> map) throws Exception {
+		dao.addStar(map);
+	}
 	
-
-
+	
+	
+	
 
 
 }

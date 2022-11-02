@@ -1,13 +1,15 @@
 package com.ssafy.home.user.service;
 
-import java.sql.SQLException;
+import java.util.Map;
 
-import com.ssafy.sample.dto.User;
+import com.ssafy.home.user.dto.User;
 
 public interface UserService {
 	
-	public int regist(User user) throws SQLException;
-	public User login(String id, String pw) throws SQLException;
-	public int edit(User user) throws SQLException;
+	void regist(User user)  throws Exception;
+	User login(Map<String, String> map)  throws Exception;
+	void edit(User user)  throws Exception;
+	int findNo(User user)  throws Exception;
+	void addStar(Map<String, Integer> map)  throws Exception;
 
 }

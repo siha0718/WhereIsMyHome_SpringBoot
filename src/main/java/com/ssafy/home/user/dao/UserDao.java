@@ -1,14 +1,16 @@
 package com.ssafy.home.user.dao;
 
 import java.sql.SQLException;
+import java.util.Map;
 
-import com.ssafy.sample.dto.User;
-
+import com.ssafy.home.user.dto.User;
 
 public interface UserDao {
 	
-	public int insert(User user) throws SQLException;
-	public User select(String id, String pw) throws SQLException;
-	public int update(User user) throws SQLException;
+	void regist(User user)  throws SQLException;
+	User login(Map<String, String> map)  throws SQLException;
+	void edit(User user)  throws SQLException;
+	int findNo(User user)  throws SQLException;
+	void addStar(Map<String, Integer> map)  throws SQLException;
 	
 }
