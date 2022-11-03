@@ -35,11 +35,11 @@
   }
   
   h2 {
-    color: tomato;
+    color: #005555;
     font-size: 2em;
   }
   .login_sns {
-    padding: 20px;
+    /*padding: 20px;*/
     display: flex;
   }
   
@@ -101,7 +101,7 @@
   }
   
   .submit {
-    margin-top: 50px;
+
     width: 100%;
   }
   .submit input {
@@ -110,7 +110,7 @@
     border: 0;
     outline: none;
     border-radius: 40px;
-    background: linear-gradient(to left, rgb(255, 77, 46), rgb(255, 155, 47));
+    background: linear-gradient(to left, #005555, rgb(126 157 151));
     color: white;
     font-size: 1.2em;
     letter-spacing: 2px;
@@ -129,7 +129,7 @@
     border: 0;
     outline: none;
     border-radius: 40px;
-    background: linear-gradient(to left, rgb(255, 77, 46), rgb(255, 155, 47));
+    background: linear-gradient(to left, #005555, rgb(126 157 151));
     color: white;
     font-size: 1.2em;
     letter-spacing: 2px;
@@ -141,7 +141,7 @@
     border: 0;
     outline: none;
     border-radius: 40px;
-    background: linear-gradient(to left, rgb(255, 77, 46), rgb(255, 155, 47));
+    background: linear-gradient(to left, #005555, rgb(126 157 151));
     color: white;
     font-size: 1.2em;
     letter-spacing: 2px;
