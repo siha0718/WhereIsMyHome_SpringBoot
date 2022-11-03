@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ssafy.home.user.dto.User;
 import com.ssafy.home.user.service.UserService;
@@ -134,20 +135,46 @@ public class UserController {
 	}
 	
 	@PostMapping("/edit")
-	public String doEdit(User user, Model model) {
+	public String doEdit(User user, RedirectAttributes rda, HttpSession session) {
 		logger.debug("수정 요청한 User info : {}", user);
 		System.out.println(user + "@@@@@@@@@@@@@@@@@@@");
 		
 		try {
 			service.edit(user);
-			model.addAttribute("msg", "수정 완료");
+			session.setAttribute("userinfo", user);
+			rda.addFlashAttribute("msg", "수정 완료");
 			return "redirect:/";
 		} catch (Exception e) {
 			e.printStackTrace();
-			model.addAttribute("msg", "정보 수정 중 문제 발생!!!");
+			rda.addFlashAttribute("msg", "수정 중 문제발생");
 			return "error/error";
 		}
 	
+	}
+	
+	
+	
+	
+/* -------------------------- 회원정보 삭제 -------------------------- */
+
+	
+	@GetMapping("/delete")
+	public String doDelete(HttpSession session, RedirectAttributes rda) throws Exception {
+		User user = (User) session.getAttribute("userinfo");
+		int res = service.delete(user);
+		session.invalidate();
+		System.out.println("res>>>" + res);
+		if(res != 1) {
+		
+			rda.addFlashAttribute("msg", "삭제 실패");
+		
+		}
+		else if(res == 1){
+			System.out.println("들어왔음");
+			rda.addFlashAttribute("msg", "삭제 성공");
+		}
+		
+		return "redirect:/";
 	}
 	
 	

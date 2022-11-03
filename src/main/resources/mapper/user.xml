@@ -40,6 +40,15 @@
 		where id = #{userid}
 	</select>
 	
+	
+	<!-- 사용자 정보 삭제 -->
+	<delete id="delete" parameterType="User">
+		delete from user
+		where userid = #{userid}	
+	</delete>
+	
+	
+	
 
 	<!-- 즐겨찾기 추가  -->
 	<insert id="addStar" parameterType="map">

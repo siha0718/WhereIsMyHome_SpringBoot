@@ -11,5 +11,6 @@ public interface UserService {
 	void edit(User user)  throws Exception;
 	int findNo(User user)  throws Exception;
 	void addStar(Map<String, Integer> map)  throws Exception;
+	int delete(User user) throws Exception;
 
 }

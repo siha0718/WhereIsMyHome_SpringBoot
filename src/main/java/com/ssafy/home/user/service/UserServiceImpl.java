@@ -42,6 +42,12 @@ public class UserServiceImpl implements UserService {
 	public void addStar(Map<String, Integer> map) throws Exception {
 		dao.addStar(map);
 	}
+
+	@Override
+	public int delete(User user) throws Exception { 
+		return dao.delete(user);
+		
+	}
 	
 	
 	

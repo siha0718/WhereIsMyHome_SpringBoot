@@ -12,5 +12,6 @@ public interface UserDao {
 	void edit(User user)  throws SQLException;
 	int findNo(User user)  throws SQLException;
 	void addStar(Map<String, Integer> map)  throws SQLException;
+	int delete(User user) throws SQLException;
 	
 }

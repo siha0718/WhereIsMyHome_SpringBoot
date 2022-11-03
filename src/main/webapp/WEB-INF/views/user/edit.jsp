@@ -21,8 +21,7 @@
     <link rel="stylesheet" href="/css/makeId.css" />
 </head>
 <body>
-<form action="" id="form-join" method="POST" class="joinForm" onsubmit="DoJoinForm__submit(this); return false;">
-	<input type="hidden" name="action" value="edit">                                                                                     
+<form action="" id="form-join" method="POST" class="joinForm" onsubmit="DoJoinForm__submit(this); return false;">                                                                                 
     <h2>회원정보 수정</h2>
    	<div class="textForm">
       <input name="userid" id="userId" type="hidden" class="id" placeholder="아이디" value="${userinfo.userid}">
@@ -39,11 +38,12 @@
     <div class="textForm">
       <input name="phone" id="phone" type="text" class="phone" placeholder="전화번호">
     </div>
-    <input type="submit" id="btn-join" class="btn" value="E D I T"/>
+    <input type="submit" id="btn-edit" class="btn" value="E D I T"/>
+    <input type="button" id="btn-delete" class="btn" value="D E L E T E"/>
 </form>
 </body>
 <script>
-document.querySelector("#btn-join").addEventListener("click", function () {
+document.querySelector("#btn-edit").addEventListener("click", function () {
     if (!document.querySelector("#userId").value) {
       alert("아이디 입력!!");
       return;
@@ -61,9 +61,17 @@ document.querySelector("#btn-join").addEventListener("click", function () {
       return;
     } else {
       let form = document.querySelector("#form-join");
-      form.setAttribute("action", "/user/regist");
+      form.setAttribute("action", "/user/edit");
       form.submit();
     }
   });
+  
+  
+document.querySelector("#btn-delete").addEventListener("click", function () {
+	location.href="/user/delete";
+  });
+  
+  
+  
 </script>
 </html>

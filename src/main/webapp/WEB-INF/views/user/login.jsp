@@ -52,7 +52,7 @@
         </div>
         <div class="join">
   
-        	<a href="${root }/user/join.jsp">회원가입</a>
+        	<a href="regist">회원가입</a>
         </div>
       </div>
     </div>
