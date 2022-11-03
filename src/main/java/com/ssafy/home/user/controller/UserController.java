@@ -3,13 +3,14 @@ package com.ssafy.home.user.controller;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.Cookie;
-
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +46,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/login")
-	public String doLogin(@RequestParam("userId") String userId, @RequestParam("userPwd") String userPwd, Model model, HttpSession session, HttpServletResponse response) {
+	public String doLogin(@RequestParam("userId") String userId, @RequestParam("userPwd") String userPwd, @RequestParam("remember") String rememberid, Model model,HttpServletRequest request, HttpServletResponse response ,HttpSession session) {
 //		logger.debug("map : {}", map.get(userid));
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("userid", userId);
@@ -56,14 +57,25 @@ public class UserController {
 			if(user != null) {
 				session.setAttribute("userinfo", user);
 				
-//				Cookie cookie = new Cookie("ssafy_id", map.get("userid"));
-//				cookie.setPath("/board");
-//				if("ok".equals(map.get("saveid"))) {
-//					cookie.setMaxAge(60*60*24*365*40);
-//				} else {
-//					cookie.setMaxAge(0);
-//				}
-//				response.addCookie(cookie);
+				if("ok".equals(rememberid)) {
+					Cookie cookie = new Cookie("rememberid", userId);
+					cookie.setMaxAge(60*60*24);
+					cookie.setPath(request.getContextPath());
+					response.addCookie(cookie);
+
+				} else { //쿠키삭제
+					Cookie[] cookies = request.getCookies();
+					if(cookies != null) {
+						for(Cookie cookie : cookies) {
+							if(cookie.getName().equals("rememberid")) {
+								cookie.setMaxAge(0);
+								cookie.setPath(request.getContextPath());
+								response.addCookie(cookie);
+								break;
+							}
+						}
+					}
+				}
 				return "redirect:/";
 			} else {
 				model.addAttribute("msg", "아이디 또는 비밀번호 확인 후 다시 로그인하세요!");
