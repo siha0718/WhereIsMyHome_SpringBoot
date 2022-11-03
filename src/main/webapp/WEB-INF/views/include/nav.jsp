@@ -8,19 +8,19 @@
 
             <c:choose>
 			<%-- session에 userInfo 객체 없는 경우(로그인 X) --%>
-				<c:when test="${empty userInfo}">
+				<c:when test="${empty userinfo}">
 					<ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
-						<li><a href="${root }/user/login.jsp">로그인</a></li>
+						<li><a href="/user/login">로그인</a></li>
 					</ul>
 					<ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
-						<li><a href="${root }/user/join.jsp">회원가입</a></li>
+						<li><a href="/user/regist">회원가입</a></li>
 					</ul>
 				</c:when>
 			<%-- session에 userInfo 객체 있는 경우(로그인 O) --%>
 				<c:otherwise>
 					<ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
-						<li><a>${userInfo.userId}님 반갑습니다.</a></li>
-						<li><a href="${root }/user?action=logout">로그아웃</a>
+						<li><a>${userinfo.username}님 반갑습니다.</a></li>
+						<li><a href="/user/logout">로그아웃</a>
 						</li>
 					</ul>
 				</c:otherwise>

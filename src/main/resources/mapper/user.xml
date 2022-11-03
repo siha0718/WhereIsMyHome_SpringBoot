@@ -7,14 +7,15 @@
 	<!-- 회원가입  -->
 	<insert id="regist" parameterType="User">
 		INSERT INTO user
-		VALUES(#userid}, #{password}, #{username}, #{address}, #{phone})
+		(userid, password, username, address, phone)
+		VALUES(#{userid}, #{password}, #{username}, #{address}, #{phone})
 	</insert>	
 	
 
 	<!-- 로그인  -->
 	<select id="login" parameterType="map" resultType="User">
-		SELECT userid, password, username, address, phone
-		FROM user WHERE id = #{userid} and password = #{password}
+			SELECT userid, password, username, address, phone
+			FROM user WHERE userid = #{userid} and password = #{password}
 	</select>
 	
 	

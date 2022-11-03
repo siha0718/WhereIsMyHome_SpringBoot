@@ -55,15 +55,15 @@ function sendRequest(selid, selected) {
 	console.log(selected);
   switch (selid) {
 	case "sido":
-		url= "http://localhost"+"/apt/getSido";
+		url= "http://localhost"+"/getSido";
 		break;
 	case "gugun":
-		url= "http://localhost"+"/apt/getGugun?sido="+selected;
+		url= "http://localhost"+"/getGugun?sido="+selected;
 		break;
 	case "dong":
 		var select = document.getElementById("sido");
         var selectsido = select.options[select.selectedIndex].value;
-		url= "http://localhost"+"/apt/getDong?sido="+selectsido+"&gugun="+selected;
+		url= "http://localhost"+"/getDong?sido="+selectsido+"&gugun="+selected;
 		break;
 	}
   	

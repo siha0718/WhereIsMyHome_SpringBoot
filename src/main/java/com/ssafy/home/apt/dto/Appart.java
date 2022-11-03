@@ -2,7 +2,7 @@ package com.ssafy.home.apt.dto;
 
 public class Appart {
 	private String apartmentName;
-	private int dealAmount;
+	private String dealAmount;
 	private String area;
 	private int dealYear;
 	private int dealMonth;
@@ -11,7 +11,7 @@ public class Appart {
 	public Appart() {
 		// TODO Auto-generated constructor stub
 	}
-	public Appart(String apartmentName, int dealAmount, String area, int dealYear, int dealMonth, String lng, String lat) {
+	public Appart(String apartmentName, String dealAmount, String area, int dealYear, int dealMonth, String lng, String lat) {
 		super();
 		this.apartmentName = apartmentName;
 		this.dealAmount = dealAmount;
@@ -27,10 +27,10 @@ public class Appart {
 	public void setApartmentName(String apartmentName) {
 		this.apartmentName = apartmentName;
 	}
-	public int getDealAmount() {
+	public String getDealAmount() {
 		return dealAmount;
 	}
-	public void setDealAmount(int dealAmount) {
+	public void setDealAmount(String dealAmount) {
 		this.dealAmount = dealAmount;
 	}
 	public String getArea() {

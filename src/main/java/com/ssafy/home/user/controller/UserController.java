@@ -41,26 +41,29 @@ public class UserController {
 	
 	@GetMapping("/login")
 	public String doLogin() {
-		return "login";
+		return "user/login";
 	}
 	
 	@PostMapping("/login")
-	public String doLogin(@RequestParam Map<String, String> map, Model model, HttpSession session, HttpServletResponse response) {
-		logger.debug("map : {}", map.get("userid"));
+	public String doLogin(@RequestParam("userId") String userId, @RequestParam("userPwd") String userPwd, Model model, HttpSession session, HttpServletResponse response) {
+//		logger.debug("map : {}", map.get(userid));
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("userid", userId);
+		map.put("password",userPwd);
 		try {
 			User user = service.login(map);
 			logger.debug("UserDto : {}", user);
 			if(user != null) {
 				session.setAttribute("userinfo", user);
 				
-				Cookie cookie = new Cookie("ssafy_id", map.get("userid"));
-				cookie.setPath("/board");
-				if("ok".equals(map.get("saveid"))) {
-					cookie.setMaxAge(60*60*24*365*40);
-				} else {
-					cookie.setMaxAge(0);
-				}
-				response.addCookie(cookie);
+//				Cookie cookie = new Cookie("ssafy_id", map.get("userid"));
+//				cookie.setPath("/board");
+//				if("ok".equals(map.get("saveid"))) {
+//					cookie.setMaxAge(60*60*24*365*40);
+//				} else {
+//					cookie.setMaxAge(0);
+//				}
+//				response.addCookie(cookie);
 				return "redirect:/";
 			} else {
 				model.addAttribute("msg", "아이디 또는 비밀번호 확인 후 다시 로그인하세요!");
@@ -78,7 +81,7 @@ public class UserController {
 
 	@GetMapping("/regist")
 	public String doRegist() { 
-		return "signup";
+		return "user/regist";
 	}
 	
 	@PostMapping("/regist")
@@ -86,7 +89,7 @@ public class UserController {
 		logger.debug("User info : {}", user);
 		try {
 			service.regist(user);
-			return "redirect:/login";
+			return "redirect:/user/login";
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("msg", "회원 가입 중 문제 발생!!!");

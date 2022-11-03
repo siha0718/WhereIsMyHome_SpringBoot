@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<%@ include file="/include/head.jsp" %>
+<%@ include file="/WEB-INF/views/include/head.jsp" %>
 <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
@@ -18,27 +18,27 @@
       src="https://kit.fontawesome.com/53a8c415f1.js"
       crossorigin="anonymous"
     ></script>
-    <link rel="stylesheet" href="${root }/css/makeId.css" />
+    <link rel="stylesheet" href="/css/makeId.css" />
 </head>
 <body>
 <form action="" id="form-join" method="POST" class="joinForm" onsubmit="DoJoinForm__submit(this); return false;">
 	<input type="hidden" name="action" value="join">                                                                                     
     <h2>회원가입</h2>
     <div class="textForm">
-      <input name="userId" id="userId" type="text" class="id" placeholder="아이디">
+      <input name="userid" id="userId" type="text" class="id" placeholder="아이디">
       </input>
     </div>
     <div class="textForm">
-      <input name="userPwd" id="userPwd" type="password" class="pw" placeholder="비밀번호">
+      <input name="password" id="userPwd" type="password" class="pw" placeholder="비밀번호">
     </div>
     <div class="textForm">
-      <input name="userName" id="userName" type="text" class="name" placeholder="이름">
+      <input name="username" id="userName" type="text" class="name" placeholder="이름">
     </div>
      <div class="textForm">
-      <input name="emailid" id="emailid" type="text" class="email" placeholder="이메일아이디">
+      <input name="address" id="address" type="text" class="address" placeholder="주소">
     </div>
     <div class="textForm">
-      <input name="emailDomain" id="emailDomain" type="text" class="name" placeholder="이메일도메인">
+      <input name="phone" id="phone" type="text" class="phone" placeholder="전화번호">
     </div>
     <input type="submit" id="btn-join" class="btn" value="J O I N"/>
 </form>
@@ -54,15 +54,15 @@ document.querySelector("#btn-join").addEventListener("click", function () {
     } else if (!document.querySelector("#userName").value) {
       alert("이름 입력!!");
       return;
-    } else if (!document.querySelector("#emailid").value) {
-      alert("이메일 아이디 입력!!");
+    } else if (!document.querySelector("#address").value) {
+      alert("주소 입력!!");
       return;
-    } else if (!document.querySelector("#emailDomain").value) {
-      alert("이메일 확인!!");
+    } else if (!document.querySelector("#phone").value) {
+      alert("전화번호 확인!!");
       return;
     } else {
       let form = document.querySelector("#form-join");
-      form.setAttribute("action", "${root}/user");
+      form.setAttribute("action", "/user/regist");
       form.submit();
     }
   });

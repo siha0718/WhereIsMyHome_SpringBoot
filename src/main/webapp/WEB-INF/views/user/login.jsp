@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<%@ include file="/include/head.jsp" %>
+<%@ include file="/WEB-INF/views/include/head.jsp" %>
 <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
@@ -15,7 +15,7 @@
       src="https://kit.fontawesome.com/53a8c415f1.js"
       crossorigin="anonymous"
     ></script>
-    <link rel="stylesheet" href="${root }/css/login.css" />
+    <link rel="stylesheet" href="/css/login.css" />
 </head>
 <body>
 <div class="wrap">
@@ -32,7 +32,7 @@
             <a href="#"><i class="fab fa-twitter"></i></a>
           </li>
         </div>
-        <form method="POST" action="${root }/user">
+        <form method="POST" action="login">
         <input type="hidden" name="action" value="login">
         <div class="login_id">
           <h4>ID</h4>

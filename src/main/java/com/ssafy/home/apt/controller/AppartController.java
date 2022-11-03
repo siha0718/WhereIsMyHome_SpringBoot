@@ -24,7 +24,7 @@ import com.ssafy.home.user.controller.UserController;
 
 
 
-@RequestMapping("/apt")
+//@RequestMapping("/apt")
 @Controller
 public class AppartController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
