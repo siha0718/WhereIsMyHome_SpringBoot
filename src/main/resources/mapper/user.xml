@@ -23,11 +23,12 @@
 	<update id="edit" parameterType="User">
 		update user
 		<trim prefix="set" suffixOverrides=",">
+			<if test="username != null">username = #{username},</if>		
 			<if test="password != null">password = #{password},</if>
 			<if test="address != null">address = #{address},</if>
 			<if test="phone != null">phone = #{phone},</if>
 		</trim>
-		where id = #{userid}
+		where userid = #{userid}
 	</update>
 	
 	
@@ -45,6 +46,7 @@
 		INSERT INTO likes
 		VALUES(#{no}, #{dongcode})
 	</insert>	
+	
 	
 	
 

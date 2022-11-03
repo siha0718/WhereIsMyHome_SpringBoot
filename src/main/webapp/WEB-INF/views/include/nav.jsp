@@ -20,6 +20,7 @@
 				<c:otherwise>
 					<ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
 						<li><a>${userinfo.username}님 반갑습니다.</a></li>
+						<li><a href="/user/edit">회원정보 수정</a></li>					
 						<li><a href="/user/logout">로그아웃</a>
 						</li>
 					</ul>

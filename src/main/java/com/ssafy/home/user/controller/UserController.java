@@ -15,8 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.home.user.dto.User;
 import com.ssafy.home.user.service.UserService;
@@ -46,8 +48,11 @@ public class UserController {
 	}
 	
 	@PostMapping("/login")
-	public String doLogin(@RequestParam("userId") String userId, @RequestParam("userPwd") String userPwd, @RequestParam("remember") String rememberid, Model model,HttpServletRequest request, HttpServletResponse response ,HttpSession session) {
+	public String doLogin(@RequestParam("userId") String userId, @RequestParam("userPwd") String userPwd, 
+			@RequestParam(value="remember", required=false) String rememberid, Model model,HttpServletRequest request, HttpServletResponse response ,HttpSession session) {
 //		logger.debug("map : {}", map.get(userid));
+		
+		System.out.println(rememberid);
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("userid", userId);
 		map.put("password",userPwd);
@@ -125,14 +130,17 @@ public class UserController {
 	
 	@GetMapping("/edit")
 	public String doEdit() {		
-		return "edit";
+		return "user/edit";
 	}
 	
-	
+	@PostMapping("/edit")
 	public String doEdit(User user, Model model) {
 		logger.debug("수정 요청한 User info : {}", user);
+		System.out.println(user + "@@@@@@@@@@@@@@@@@@@");
+		
 		try {
 			service.edit(user);
+			model.addAttribute("msg", "수정 완료");
 			return "redirect:/";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -151,6 +159,7 @@ public class UserController {
 	public String doStar(@RequestParam("dongcode") int dongcode, HttpSession session, Model model) throws Exception {
 		
 		logger.debug("show favorite dongcode : {}", dongcode);
+
 		
 		User user = (User) session.getAttribute("userinfo");
 		logger.debug("즐겨찾기 선택한 사용자 정보", user);
