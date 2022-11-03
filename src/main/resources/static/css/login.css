@@ -62,7 +62,7 @@
   
   .login_id {
     margin-top: 20px;
-    width: 80%;
+    width: 100%;
   }
   
   .login_id input {
@@ -77,7 +77,7 @@
   
   .login_pw {
     margin-top: 20px;
-    width: 80%;
+    width: 100%;
   }
   
   .login_pw input {
@@ -102,7 +102,7 @@
   
   .submit {
     margin-top: 50px;
-    width: 80%;
+    width: 100%;
   }
   .submit input {
     width: 100%;
@@ -115,10 +115,26 @@
     font-size: 1.2em;
     letter-spacing: 2px;
   }
-  .join {
-    margin-top: 50px;
-    width: 80%;
+  .join{
+    margin-top: 20px;
+    width: 100%;  
   }
+  
+  .join a{
+  	display:block;
+  	text-align:center;
+  	line-height:50px;
+    width: 100%!important;
+    height: 50px;
+    border: 0;
+    outline: none;
+    border-radius: 40px;
+    background: linear-gradient(to left, rgb(255, 77, 46), rgb(255, 155, 47));
+    color: white;
+    font-size: 1.2em;
+    letter-spacing: 2px;
+  }
+  
   .submit a {
     width: 100%;
     height: 50px;

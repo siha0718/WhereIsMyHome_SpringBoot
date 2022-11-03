@@ -65,7 +65,7 @@
     background: none;
   }
   
-  .email {
+  .address {
     width: 100%;
     border:none;
     outline:none;
@@ -75,7 +75,7 @@
     background: none;
   }
   
-  .nickname {
+  .phone {
     width: 100%;
     border:none;
     outline:none;

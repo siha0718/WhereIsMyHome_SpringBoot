@@ -51,6 +51,7 @@
           <input type="submit" value="submit" />
         </div>
         <div class="join">
+  
         	<a href="${root }/user/join.jsp">회원가입</a>
         </div>
       </div>
